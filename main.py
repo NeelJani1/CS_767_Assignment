@@ -1,10 +1,13 @@
 from dotenv import load_dotenv
 from pydantic import BaseModel
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI 
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import PydanticOutputParser
 from langchain_classic.agents import AgentExecutor, create_tool_calling_agent
-from tools import search_tool
+from tools import search_tool, wiki_tool , save_tool ,save_to_txt_file
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, module='wikipedia')
 
 load_dotenv()
 
@@ -13,8 +16,8 @@ class ResponseSchema(BaseModel):
     summary: str
     source: list[str]
     tools_used: list[str]
-
-llm = ChatGoogleGenerativeAI(model="gemini-3.5-flash",temperature=1.0)
+#llm = ChatOpenAI(model="gpt-4o")
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash",temperature=0.7)
 
 parser = PydanticOutputParser(pydantic_object=ResponseSchema)
 
@@ -23,18 +26,23 @@ parser = PydanticOutputParser(pydantic_object=ResponseSchema)
 prompt = ChatPromptTemplate.from_messages(
     [
         ("system", 
-        """
-        You are a helpful assistant that provides accurate information based on the user's query.
-        And No Extra text other than the summary.\n {format_instructions}
-        """)
-        ,
+        """You are a helpful research assistant. 
+        Use your tools to find accurate information based on the user's query.
+        
+        IMPORTANT RULES:
+        1. You must ALWAYS provide your final answer as a valid JSON object.
+        2. Do not include any conversational text, greetings, or markdown outside of the JSON block.
+        3. Your final output must strictly follow these schema instructions:
+        
+        {format_instructions}
+        """),
         ("placeholder", "{chat_history}"),
         ("human", "{query}"),
         ("placeholder", "{agent_scratchpad}")
     ]
-    ).partial(format_instructions=parser.get_format_instructions())
+).partial(format_instructions=parser.get_format_instructions())
 
-tools = [search_tool]
+tools = [search_tool, wiki_tool, save_tool]
 agent = create_tool_calling_agent(
     llm=llm, 
     prompt=prompt, 
@@ -42,16 +50,54 @@ agent = create_tool_calling_agent(
     )
 
 agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+
+# ... [rest of your code above] ...
+
 query = input("what can I help you with? \n query :")
-raw_response = agent_executor.invoke({"query": query })
 
 try:
-    structured_response = parser.parse(raw_response.get("output")[0]["text"])
-    print(structured_response)
-except Exception as e:
-    print("Error parsing response:", e , "Raw response was:", raw_response)
+    raw_response = agent_executor.invoke({"query": query})
+    
+    try:
+        output_raw = raw_response.get("output")
+        
+        # If Gemini returns a list of chunks, stitch them together
+        if isinstance(output_raw, list):
+            extracted_text = ""
+            for chunk in output_raw:
+                if isinstance(chunk, str):
+                    extracted_text += chunk
+                elif isinstance(chunk, dict) and "text" in chunk:
+                    extracted_text += chunk["text"]
+            output_string = extracted_text
+        else:
+            output_string = str(output_raw)
 
-print(structured_response.topic)
-print(structured_response.summary)
-print(structured_response.source)
-print(structured_response.tools_used)
+        # Parse the stitched string
+        structured_response = parser.parse(output_string)
+        
+        print("\n--- PARSED RESPONSE ---")
+        print("Topic:", structured_response.topic)
+        print("Summary:", structured_response.summary)
+        print("Source:", structured_response.source)
+        print("Tools Used:", structured_response.tools_used)
+        
+        # --- NEW: SAVE THE RESPONSE MANUALLY HERE ---
+        # Format what you want to save
+        log_data = (
+            f"Query: {query}\n"
+            f"Topic: {structured_response.topic}\n"
+            f"Summary: {structured_response.summary}\n"
+            f"Sources: {', '.join(structured_response.source)}\n"
+        )
+        # Call your existing save function directly
+        save_result = save_to_txt_file(log_data)
+        print(f"\n[System] {save_result}")
+        # --------------------------------------------
+        
+    except Exception as e:
+        print("\nError parsing response into Pydantic schema:", e)
+        print("Output string attempted to parse was:\n", output_string)
+
+except Exception as e:
+    print(f"\nAgent execution failed. Error: {e}")
