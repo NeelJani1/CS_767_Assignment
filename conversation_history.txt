@@ -1,0 +1,8 @@
+---Conversation History---
+Time: 2026-05-31 21:31:32:
+Query: Who is india's 7th PM ?
+Topic: 7th Prime Minister of India
+Summary: Vishwanath Pratap Singh, also known as V. P. Singh, served as the 7th Prime Minister of India from December 2, 1989, to November 10, 1990.
+Sources: Wikipedia
+
+--------------------------------------------------
