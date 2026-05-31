@@ -1,14 +1,3 @@
-Here is the fully cleaned, perfectly formatted version for your GitHub
-repository.
-
-I removed the duplicate sections, fixed all the bullet points, added the grey
-code boxes (with the backticks), included your actual video link, and even added
-your name at the bottom based on your GitHub username.
-
-Click the "Copy" button in the top right corner of the block below, go to your
-readme.md file on GitHub, click the Pencil icon ✏️ to edit it, paste this in,
-and click Commit changes:
-
 # Intelligent Multimodal Planning & Research Agent 🤖
 
 **Course:** CS 767 Intelligent Software Agents  
