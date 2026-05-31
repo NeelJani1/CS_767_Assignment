@@ -9,7 +9,7 @@
 ## 🧠 System Overview
 This project is a **Goal-Oriented Planning & Research Agent** built using the ReAct (Reasoning and Acting) framework. It acts as an autonomous assistant capable of taking high-level user goals (e.g., "Plan a 7-day trip around this landmark"), researching up-to-date information, and formatting the output into a strictly safe JSON schema.
 
-### Core Capabilities (Assignment Requirements Met):
+### Core Capabilities:
 * **Perceive (Multimodal Input):** The agent accepts both conversational text and local image files (via Base64 encoding), allowing it to "see" and analyze user-provided images.
 * **Decide (LLM & Tools):** Powered by Google's Gemini Flash models, the agent autonomously decides when its internal knowledge is insufficient and routes queries to external tools.
 * **Act (Tool Execution):** The agent utilizes `DuckDuckGoSearchRun` for live web data and `Wikipedia` for encyclopedic context. Finally, it uses local file system operations to automatically save generated itineraries.
