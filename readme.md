@@ -1,58 +1,44 @@
-Here is a complete, highly professional README.md file tailored exactly to your
-assignment rubric. It highlights all the advanced features you built (Memory,
-Vision, Tool-Calling, Safety Mechanisms) and includes the required reproduction
-instructions and commit evolution.
+Here is the fully cleaned, perfectly formatted version for your GitHub
+repository.
 
-Just copy this entire block and save it as README.md in your GitHub repository!
+I removed the duplicate sections, fixed all the bullet points, added the grey
+code boxes (with the backticks), included your actual video link, and even added
+your name at the bottom based on your GitHub username.
 
-Intelligent Multimodal Planning & Research Agent 🤖
+Click the "Copy" button in the top right corner of the block below, go to your
+readme.md file on GitHub, click the Pencil icon ✏️ to edit it, paste this in,
+and click Commit changes:
 
-Course: CS 767 Intelligent Software Agents
-Goal: Design and implement a software agent prototype that can perceive input,
-make decisions, and take actions toward a goal.
+# Intelligent Multimodal Planning & Research Agent 🤖
 
-🎥 Demo Video 
+**Course:** CS 767 Intelligent Software Agents  
+**Goal:** Design and implement a software agent prototype that can perceive input, make decisions, and take actions toward a goal.
 
-[2-min Demo video](https://drive.google.com/file/d/1HFRvBOcnLBepkx14RdPtprNDDann1R-7/view?usp=drive_link)
+## 🎥 Demo Video 
+[**Click here to watch the 2-min Demo Video**](https://drive.google.com/file/d/1HFRvBOcnLBepkx14RdPtprNDDann1R-7/view?usp=drive_link)
 
-🧠 System Overview
+## 🧠 System Overview
+This project is a **Goal-Oriented Planning & Research Agent** built using the ReAct (Reasoning and Acting) framework. It acts as an autonomous assistant capable of taking high-level user goals (e.g., "Plan a 7-day trip around this landmark"), researching up-to-date information, and formatting the output into a strictly safe JSON schema.
 
-This project is a Goal-Oriented Planning & Research Agent built using the ReAct
-(Reasoning and Acting) framework. It acts as an autonomous assistant capable of
-taking high-level user goals (e.g., "Plan a 7-day trip around this landmark"),
-researching up-to-date information, and formatting the output into a strictly
-safe JSON schema.
+### Core Capabilities (Assignment Requirements Met):
+* **Perceive (Multimodal Input):** The agent accepts both conversational text and local image files (via Base64 encoding), allowing it to "see" and analyze user-provided images.
+* **Decide (LLM & Tools):** Powered by Google's Gemini Flash models, the agent autonomously decides when its internal knowledge is insufficient and routes queries to external tools.
+* **Act (Tool Execution):** The agent utilizes `DuckDuckGoSearchRun` for live web data and `Wikipedia` for encyclopedic context. Finally, it uses local file system operations to automatically save generated itineraries.
+* **Memory:** Implements LangChain's `ConversationBufferMemory`, allowing the agent to maintain context over multiple turns (e.g., modifying a 2-day trip to a 7-day trip without restating the destination).
+* **Safety Mechanism:** Uses `PydanticOutputParser` to enforce strict JSON output validation. This prevents prompt-injection and hallucinated formatting, ensuring the output is always machine-readable and predictable.
 
-Core Capabilities (Assignment Requirements Met):
+---
 
-  - Perceive (Multimodal Input): The agent accepts both conversational text and
-    local image files (via Base64 encoding), allowing it to "see" and analyze
-    user-provided images.
-  - Decide (LLM & Tools): Powered by Google's Gemini Flash models, the agent
-    autonomously decides when its internal knowledge is insufficient and routes
-    queries to external tools.
-  - Act (Tool Execution): The agent utilizes DuckDuckGoSearchRun for live web
-    data and Wikipedia for encyclopedic context. Finally, it uses local file
-    system operations to automatically save generated itineraries.
-  - Memory: Implements LangChain's ConversationBufferMemory, allowing the agent
-    to maintain context over multiple turns (e.g., modifying a 2-day trip to
-    a 7-day trip without restating the destination).
-  - Safety Mechanism: Uses PydanticOutputParser to enforce strict JSON output
-    validation. This prevents prompt-injection and hallucinated formatting,
-    ensuring the output is always machine-readable and predictable.
+## ⚙️ Reproduction Instructions
 
-⚙️ Reproduction Instructions
+### 1. Prerequisites
+* Python 3.10+
+* A valid Google Gemini API Key. Get one for free at [Google AI Studio](https://aistudio.google.com/).
 
-1. Prerequisites
-
-  - Python 3.10+
-  - A valid Google Gemini API Key. Get one for free at Google AI Studio. or use any other API key that has supported by langchain
-
-2. Environment Setup
-
+### 2. Environment Setup
 Clone this repository and navigate to the project folder:
-
-git clone <your-github-repo-url>
+```bash
+git clone https://github.com/NeelJani1/CS_767_Assignment.git
 cd CS_767_Assignment
 
 Create a .env file in the root directory and add your Google API key:
@@ -63,7 +49,7 @@ GOOGLE_API_KEY="your_api_key_here"
 
 Install the required LangChain and tool libraries:
 
-pip install langchain langchain-google-genai langchain-community pydantic python-dotenv duckduckgo-search wikipedia
+pip install -r requirements.txt
 
 4. Running the Agent
 
@@ -73,8 +59,8 @@ python main.py
 
   - Text queries: Type your goal/question and press Enter.
   - Image queries: When prompted, provide the absolute local path to an image
-    (e.g., /home/user/images/dog.jpg) or drag-and-drop the image into the
-    terminal.
+    (e.g., /home/neel/CS_767_Assignment/images.jpg) or drag-and-drop the image
+    into the terminal.
 
 🔄 Design Evolution & Commit Checkpoints
 
@@ -107,4 +93,5 @@ the challenges overcome during development:
         Gemini model. Fixed terminal quote-escaping for drag-and-drop file
         paths.
 
-Developed for CS 767 by [Your Name/Student ID]
+Developed for CS 767 by Neel Jani
+
