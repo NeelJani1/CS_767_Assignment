@@ -22,7 +22,7 @@ This project is a **Goal-Oriented Planning & Research Agent** built using the Re
 
 ### 1. Prerequisites
 * Python 3.10+
-* A valid Google Gemini API Key. Get one for free at [Google AI Studio](https://aistudio.google.com/).
+* A valid Google Gemini API Key. Get one for free at [Google AI Studio](https://aistudio.google.com/). or other API Key Supported by langchain
 
 ### 2. Environment Setup
 Clone this repository and navigate to the project folder:
