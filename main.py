@@ -14,7 +14,7 @@ class ResponseSchema(BaseModel):
     source: list[str]
     tools_used: list[str]
 
-llm = ChatGoogleGenerativeAI(model="gemini-3.5-flash",temperature=0.7)
+llm = ChatGoogleGenerativeAI(model="gemini-3.5-flash",temperature=1.0)
 
 parser = PydanticOutputParser(pydantic_object=ResponseSchema)
 
@@ -24,12 +24,12 @@ prompt = ChatPromptTemplate.from_messages(
     [
         ("system", 
         """
-        You are a helpful assistant that provides concise summaries of topics.
-        And No Extra text other than the summary.\n{format_instructions}
+        You are a helpful assistant that provides accurate information based on the user's query.
+        And No Extra text other than the summary.\n {format_instructions}
         """)
         ,
         ("placeholder", "{chat_history}"),
-        ("human", "Provide a summary of the topic: {topic}"),
+        ("human", "{query}"),
         ("placeholder", "{agent_scratchpad}")
     ]
     ).partial(format_instructions=parser.get_format_instructions())
@@ -42,7 +42,7 @@ agent = create_tool_calling_agent(
     )
 
 agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
-query = input("what can I help you with? ")
+query = input("what can I help you with? \n query :")
 raw_response = agent_executor.invoke({"query": query })
 
 try:
